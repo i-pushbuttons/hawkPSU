@@ -1,0 +1,12 @@
+specVersion: "v1beta"
+serviceId: "comp_stem"
+location: "us-central1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "fdcdb"
+      cloudSql:
+        instanceId: "comp_stem-fdc"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
