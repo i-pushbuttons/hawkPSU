@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawk Math</title>
+    <style>
+        body {
+            font-family: Georgia, serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 50px; /* Reduced padding */
+            border-radius: 25px; /* Adjusted border radius */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 550px; /* Reduced width */
+            opacity: 0;
+            transform: scale(0.7);
+            animation: zoomIn 1s ease-out forwards;
+        }
+
+        @keyframes zoomIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .logo {
+            background-color: #ddd;
+            width: 250px; /* Reduced logo size */
+            height: 250px; /* Reduced logo size */
+            border-radius: 50%;
+            margin: 0 auto 30px; /* Reduced margin */
+        }
+
+        .options {
+            margin: 30px 0; /* Reduced margin */
+            display: flex; /* Use Flexbox */
+            justify-content: center; /* Center the radio buttons */
+        }
+
+        .options label {
+            margin: 0 20px; /* Space between radio buttons */
+            font-size: 24px; /* Adjusted font size */
+            position: relative;
+            padding-left: 40px; /* Adjusted padding for radio buttons */
+            cursor: pointer;
+        }
+
+        input[type="radio"] {
+            display: none; /* Hide the default radio buttons */
+        }
+
+        input[type="radio"] + .custom-radio {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px; /* Reduced size */
+            height: 30px; /* Reduced size */
+            border: 2px solid #4CAF50; /* Adjusted border thickness */
+            border-radius: 50%;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        input[type="radio"]:checked + .custom-radio {
+            background-color: #4CAF50; /* Change the background when checked */
+            border-color: #388E3C; /* Darker green border when checked */
+        }
+
+        .play-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px; /* Adjusted padding */
+            border: none;
+            border-radius: 25px; /* Adjusted border radius */
+            font-size: 24px; /* Adjusted font size */
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .play-button.enabled {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .play-button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="C:\Users\alder\OneDrive\Desktop\HACKPSU\photos\Logo.png" alt="Logo" class="logo">
+        <div class="options">
+            <label>
+                <input type="radio" name="mode" value="solo">
+                <span class="custom-radio"></span>
+                Solo
+            </label>
+            <label>
+                <input type="radio" name="mode" value="competitive">
+                <span class="custom-radio"></span>
+                Competitive
+            </label>
+        </div>
+        <button class="play-button" id="playButton" disabled>Continue</button>
+    </div>
+
+    <script>
+        // Get the play button and all radio buttons
+        const playButton = document.getElementById('playButton');
+        const radioButtons = document.querySelectorAll('input[name="mode"]');
+
+        // Add event listeners to the radio buttons
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Enable the play button when a radio option is selected
+                playButton.disabled = false;
+                playButton.classList.add('enabled');
+            });
+        });
+    </script>
+</body>
+</html>
