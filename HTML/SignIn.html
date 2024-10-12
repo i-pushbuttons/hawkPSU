@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In / Create Account</title>
+    <style>
+        body {
+            font-family: Georgia, serif; /* Set font to Georgia for the body */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            opacity: 0; /* Start invisible for animation */
+            animation: fadeIn 1s forwards; /* Fade in effect */
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1; /* Fully visible at the end of the animation */
+            }
+        }
+
+        .container {
+            background-color: white;
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 400px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-family: Georgia, serif; /* Ensure heading uses Georgia font */
+        }
+
+        .logo {
+            background-color: #ffffff; /* Placeholder color */
+            width: 300px; /* Rectangular logo width */
+            height: 150px; /* Rectangular logo height */
+            border-radius: 10px; /* Rounded corners */
+            margin: 0 auto 20px; /* Center the logo */
+        }
+
+        .input-container {
+            margin: 10px 0; /* Margin for spacing */
+            display: flex;
+            flex-direction: column; /* Stack label and input vertically */
+            align-items: flex-start; /* Align items to the left */
+            width: 100%; /* Full width for the container */
+        }
+
+        label {
+            margin-bottom: 5px; /* Space between label and input */
+            font-size: 18px; /* Increased font size for labels */
+            font-family: Georgia, serif; /* Ensure label uses Georgia font */
+            text-align: left; /* Left align label text */
+            width: 100%; /* Full width for labels */
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: Georgia, serif; /* Ensure inputs use Georgia font */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            width: 100%;
+            margin-top: 15px; /* Space above the button */
+            font-family: Georgia, serif; /* Ensure button uses Georgia font */
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .link {
+            margin-top: 15px;
+            display: block;
+            color: #4CAF50;
+            text-decoration: none;
+            font-family: Georgia, serif; /* Ensure link uses Georgia font */
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="C:\Users\alder\OneDrive\Desktop\HACKPSU\photos\LogoC.png" alt="Logo" class="logo">
+        <h1>Sign In / Create Account</h1>
+
+        <div class="input-container">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username" required>
+        </div>
+
+        <div class="input-container">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+
+        <button class="button" id="signInButton">Sign In</button>
+        <a href="#" class="link" id="createAccountLink">Create Account</a>
+    </div>
+
+    <script>
+        // Redirect to the game mode selection page when the Sign In button is clicked
+        document.getElementById('signInButton').addEventListener('click', function() {
+            // Here, you would typically add authentication logic
+            window.location.href = 'HomePage.html'; // Replace with the actual game mode page URL
+        });
+
+        // Redirect to the Create Account section (you can implement the actual account creation logic later)
+        document.getElementById('createAccountLink').addEventListener('click', function(event) {
+            event.preventDefault();
+            alert("Account creation feature coming soon!");
+        });
+    </script>
+</body>
+</html>
