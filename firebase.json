@@ -1,7 +1,4 @@
 {
-  "dataconnect": {
-    "source": "dataconnect"
-  },
   "hosting": {
     "public": "public",
     "ignore": [
@@ -19,9 +16,6 @@
   "emulators": {
     "hosting": {
       "port": 5000
-    },
-    "dataconnect": {
-      "port": 9399
     },
     "ui": {
       "enabled": true
