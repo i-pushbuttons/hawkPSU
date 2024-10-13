@@ -3,28 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Firebase App</title>
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <title>Hawk Math</title>
+
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-    <!-- Add additional Firebase SDKs that you want to use -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
-    <!-- Add other services as needed -->
+
+    <style>
+        body {
+            font-family: Georgia, serif;
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 550px;
+            opacity: 0;
+            transform: scale(0.7);
+            animation: zoomIn 1s ease-out forwards;
+        }
+
+        @keyframes zoomIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .logo {
+            background-color: #ddd;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+        }
+
+        .options {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .options label {
+            margin: 0 20px;
+            font-size: 24px;
+            position: relative;
+            padding-left: 40px;
+            cursor: pointer;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"] + .custom-radio {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            border: 2px solid #4CAF50;
+            border-radius: 50%;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        input[type="radio"]:checked + .custom-radio {
+            background-color: #4CAF50;
+            border-color: #388E3C;
+        }
+
+        .play-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .play-button.enabled {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .play-button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .nav {
+            margin-bottom: 20px;
+        }
+
+        .nav button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <h1>HAWK TUAH</h1>
-    <div id="app"></div>
+    <div class="container">
+        <div class="nav">
+            <button onclick="showSection('home')">Home</button>
+            <button onclick="showSection('important')">Important</button>
+        </div>
+        <div id="home" class="content-section active">
+            <img src="/photos/Logo.png" alt="Logo" class="logo"> <!-- Updated image path -->
+            <div class="options">
+                <label>
+                    <input type="radio" name="mode" value="solo">
+                    <span class="custom-radio"></span>
+                    Solo
+                </label>
+                <label>
+                    <input type="radio" name="mode" value="competitive">
+                    <span class="custom-radio"></span>
+                    Competitive
+                </label>
+            </div>
+            <button class="play-button" id="playButton" disabled onclick="goToGameOn()">Continue</button>
+        </div>
+        <div id="important" class="content-section">
+            <!-- Insert important content from index.html here -->
+            <h2>Important Content</h2>
+            <p>This is where the important content from the original index.html goes.</p>
+        </div>
+    </div>
 
+    <!-- Firebase Initialization Script -->
     <script>
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "firebase/app";
-        import { getAnalytics } from "firebase/analytics";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyD6RAw-E2MBugeP4RqJYCQnzDFf5jJSu-8",
             authDomain: "competitive-stem.firebaseapp.com",
@@ -37,17 +174,13 @@
 
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        
-        // Example: Initialize Firebase Auth and Firestore
+        const analytics = firebase.analytics();
         const auth = firebase.auth();
         const db = firebase.firestore();
-        
-        // Your app logic here
-        // Example: Sign in a user
+
+        // Example Firebase auth code
         auth.signInWithEmailAndPassword('user@example.com', 'password')
             .then((userCredential) => {
-                // Signed in
                 const user = userCredential.user;
                 console.log('User signed in:', user);
             })
@@ -56,8 +189,29 @@
             });
     </script>
 
+    <script>
+        const playButton = document.getElementById('playButton');
+        const radioButtons = document.querySelectorAll('input[name="mode"]');
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                playButton.disabled = false;
+                playButton.classList.add('enabled');
+            });
+        });
+
+        function goToGameOn() {
+            window.location.href = "Params.html"; // Redirect to GameOn.html
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+    </script>
+
     <script src="app.js" defer></script>
-
-
 </body>
 </html>
