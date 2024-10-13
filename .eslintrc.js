@@ -10,7 +10,7 @@ module.exports = {
   ],
   rules: {
     'quotes': ['error', 'single'],
-    'require-jsdoc': 'off', // Turn off the deprecated rule
+    "require-jsdoc": "off", // Turn off the deprecated rule
   },
   parserOptions: {
     ecmaVersion: 2018,
