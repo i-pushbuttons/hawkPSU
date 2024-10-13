@@ -1,0 +1,60 @@
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+class PlayerInfo {
+    constructor() {
+        // You can initialize any other properties if needed
+    }
+
+    // Method to upload user data to Firestore
+    async uploadData(elo, name, email, password, username) {
+        try {
+            await db.collection('users').doc(username).set({
+                name: name,
+                elo: elo,
+                email: email,
+                password: password, // It's not recommended to store passwords as plain text
+                username: username
+            });
+            console.log("User data uploaded successfully!");
+        } catch (error) {
+            console.error("Error uploading user data: ", error);
+        }
+    }
+
+    // Method to get user details by username
+    async getUser(username) {
+        try {
+            const doc = await db.collection('users').doc(username).get();
+            if (doc.exists) {
+                return doc.data();
+            } else {
+                console.log("No such user!");
+                return null;
+            }
+        } catch (error) {
+            console.error("Error getting user data: ", error);
+            return null;
+        }
+    }
+
+    // Method to remove a user by username
+    async removeUser(username) {
+        try {
+            await db.collection('users').doc(username).delete();
+            console.log("User removed successfully!");
+        } catch (error) {
+            console.error("Error removing user: ", error);
+        }
+    }
+}
