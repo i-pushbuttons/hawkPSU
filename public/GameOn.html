@@ -215,7 +215,9 @@
             </div>
         </div>
 
-        <textarea class="answer-box" rows="4" placeholder="Type your answer here and press enter..."></textarea>
+        <textarea class="answer-box" id="answer-box1" rows="4" placeholder="User 1: Type your answer here and press enter..."></textarea>
+        <textarea class="answer-box" id="answer-box2" rows="4" placeholder="User 2: Type your answer here and press enter..."></textarea>
+
 
         <div class="keyboard">
             <div class="key" onclick="insertValue('1')">1</div>
@@ -238,11 +240,15 @@
     </div>
 
     <script>
-        let correctCount = 0;
-        let incorrectCount = 0;
+        let correctCount1 = 0;
+        let incorrectCount1 = 0;
+        let correctCount2 = 0;
+        let incorrectCount2 = 0;
 
-        function insertValue(value) {
-            const answerBox = document.querySelector('.answer-box');
+        const promptElement = document.querySelector('.prompt'); // Define promptElement
+
+        function insertValue(value, userId) {
+            const answerBox = document.getElementById(`answer-box${userId}`);
             if (value === '=') {
                 try {
                     answerBox.value = eval(answerBox.value) || '';
@@ -254,11 +260,73 @@
             }
         }
 
-        const answerBox = document.querySelector('.answer-box');
-        const promptElement = document.querySelector('.prompt');
-        const userInfo1 = document.querySelector('.question-status1');
-        const userInfo2 = document.querySelector('.question-status2');
+        function checkUserAnswer(userId) {
+            const answerBox = document.getElementById(`answer-box${userId}`);
+            if (!answerBox) {
+                console.error(`Answer box for user ${userId} not found`);
+                return;
+            }
+            const userAnswer = answerBox.value.trim();
+            fetch('http://localhost:5000/check-answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ answer: userAnswer })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.correct) {
+                    if (userId === 1) correctCount1++;
+                    else correctCount2++;
+                    promptElement.textContent = 'Correct!';
+                } else {
+                    if (userId === 1) incorrectCount1++;
+                    else incorrectCount2++;
+                    promptElement.textContent = 'Incorrect, try again.';
+                }
+                updateScore(userId);
+                setTimeout(() => clearAnswer(userId), 100);
+            })
+            .catch(error => {
+                console.error('Error checking answer:', error);
+            });
+        }
 
+        function updateScore(userId) {
+            const userInfo = document.getElementById(`question-status${userId}`);
+            if (!userInfo) {
+                console.error(`User info for user ${userId} not found`);
+                return;
+            }
+            if (userId === 1) {
+                userInfo.textContent = `Correct: ${correctCount1} | Incorrect: ${incorrectCount1}`;
+            } else {
+                userInfo.textContent = `Correct: ${correctCount2} | Incorrect: ${incorrectCount2}`;
+            }
+        }
+
+        function clearAnswer(userId) {
+            const answerBox = document.getElementById(`answer-box${userId}`);
+            if (answerBox) {
+                answerBox.value = '';
+            }
+            fetchNewProblem();
+        }
+
+        document.getElementById('answer-box1').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                checkUserAnswer(1);
+            }
+        });
+
+        document.getElementById('answer-box2').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                checkUserAnswer(2);
+            }
+        });
 
         function fetchNewProblem() {
             fetch('http://localhost:5000/generate-problem')
@@ -271,52 +339,6 @@
                 });
         }
 
-
-        function checkUserAnswer() {
-            const userAnswer = answerBox.value.trim();
-            fetch('http://localhost:5000/check-answer', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ answer: userAnswer })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.correct) {
-                    correctCount++;
-                    promptElement.textContent = 'Correct!';
-                } else {
-                    incorrectCount++;
-                    promptElement.textContent = 'Incorrect, try again.';
-                }
-                updateScore();
-                setTimeout(clearAnswer, 100);
-            })
-            .catch(error => {
-                console.error('Error checking answer:', error);
-            });
-        }
-
-        function updateScore() {
-        userInfo1.textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
-        // If you have multiple users, you can update their scores similarly
-        // user2Status.textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
-    }
-
-        function clearAnswer() {
-            answerBox.value = '';
-            fetchNewProblem();
-        }
-
-        answerBox.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                checkUserAnswer();
-                //clearAnswer();
-            }
-        });
-        
         fetchNewProblem();
         let timeLeft = 60; 
         const timerElement = document.getElementById('timer');
@@ -335,25 +357,7 @@
             }
         }
 
-
         const timerInterval = setInterval(updateTimer, 1000);
-
-        // Call the function to fetch and display the message
-/*
-        fetch('/get-problem')
-            .then(response => response.json())
-            .then(data => {
-                if (data.problem) {
-                    document.querySelector('.prompt').textContent = data.problem;
-                } else {
-                    console.error('Problem not found');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching problem:', error);
-            });
-        */
-       
     </script>
 </body>
 </html>
