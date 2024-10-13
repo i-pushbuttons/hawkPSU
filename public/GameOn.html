@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="photos/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hawk Math</title>
+    <title>Hawk Math - Game On!</title>
 
     <!-- Link to Favicon -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -169,19 +171,19 @@
         };
 
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(app);
+        //const app = firebase.initializeApp(firebaseConfig);
+        //const db = firebase.firestore(app);
 
         // Fetch and display the problem
-        db.collection('problems').doc('currentProblem').get().then((doc) => {
-            if (doc.exists) {
-                document.querySelector('.prompt').textContent = doc.data().problem;
-        } else {
-            console.log("No such document!");
-            }
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-        });
+        //db.collection('problems').doc('currentProblem').get().then((doc) => {
+        //    if (doc.exists) {
+        //        document.querySelector('.prompt').textContent = doc.data().problem;
+        //} else {
+        //    console.log("No such document!");
+        //    }
+        //}).catch((error) => {
+        //    console.log("Error getting document:", error);
+        //});
 </script>
 
 </head>
@@ -199,7 +201,7 @@
                 <div class="user-info">
                     <div class="username">Username: User1</div> <!-- Bold username -->
                     <div class="ranking">Ranking: #1</div>
-                    <div class="question-status">Correct: 5 | Incorrect: 2</div> <!-- Question status -->
+                    <div class="question-status1"></div> <!-- Question status -->
                 </div>
             </div>
 
@@ -210,12 +212,14 @@
                 <div class="user-info">
                     <div class="username">Username: User2</div> <!-- Bold username -->
                     <div class="ranking">Ranking: #2</div>
-                    <div class="question-status">Correct: 3 | Incorrect: 4</div> <!-- Question status -->
+                    <div class="question-status2"></div> <!-- Question status -->
                 </div>
             </div>
         </div>
 
-        <textarea class="answer-box" rows="4" placeholder="Type your answer here and press enter..."></textarea>
+        <textarea class="answer-box" id="answer-box1" rows="4" placeholder="User 1: Type your answer here and press enter..."></textarea>
+        <textarea class="answer-box" id="answer-box2" rows="4" placeholder="User 2: Type your answer here and press enter..."></textarea>
+
 
         <div class="keyboard">
             <div class="key" onclick="insertValue('1')">1</div>
@@ -238,8 +242,15 @@
     </div>
 
     <script>
-        function insertValue(value) {
-            const answerBox = document.querySelector('.answer-box');
+        let correctCount1 = 0;
+        let incorrectCount1 = 0;
+        let correctCount2 = 0;
+        let incorrectCount2 = 0;
+
+        const promptElement = document.querySelector('.prompt'); // Define promptElement
+
+        function insertValue(value, userId) {
+            const answerBox = document.getElementById(`answer-box${userId}`);
             if (value === '=') {
                 try {
                     answerBox.value = eval(answerBox.value) || '';
@@ -251,14 +262,74 @@
             }
         }
 
-        const answerBox = document.querySelector('.answer-box');
-        const promptElement = document.querySelector('.prompt');
+        function checkUserAnswer(userId) {
+            const answerBox = document.getElementById(`answer-box${userId}`);
+            if (!answerBox) {
+                console.error(`Answer box for user ${userId} not found`);
+                return;
+            }
+            const userAnswer = answerBox.value.trim();
+            fetch('http://localhost:5000/check-answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ answer: userAnswer })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.correct) {
+                    if (userId === 1) correctCount1++;
+                    else correctCount2++;
+                    promptElement.textContent = 'Correct!';
+                } else {
+                    if (userId === 1) incorrectCount1++;
+                    else incorrectCount2++;
+                    promptElement.textContent = 'Incorrect, try again.';
+                }
+                updateScore(userId);
+                setTimeout(() => clearAnswer(userId), 100);
+            })
+            .catch(error => {
+                console.error('Error checking answer:', error);
+            });
+        }
 
-        function clearAnswer() {
-            answerBox.value = '';
-            promptElement.textContent = ''; // Revised by Jacob
+        function updateScore(userId) {
+            const userInfo = document.getElementById(`question-status${userId}`);
+            if (!userInfo) {
+                console.error(`User info for user ${userId} not found`);
+                return;
+            }
+            if (userId === 1) {
+                userInfo.textContent = `Correct: ${correctCount1} | Incorrect: ${incorrectCount1}`;
+            } else {
+                userInfo.textContent = `Correct: ${correctCount2} | Incorrect: ${incorrectCount2}`;
+            }
+        }
+
+        function clearAnswer(userId) {
+            const answerBox = document.getElementById(`answer-box${userId}`);
+            if (answerBox) {
+                answerBox.value = '';
+            }
             fetchNewProblem();
         }
+
+        document.getElementById('answer-box1').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                checkUserAnswer(1);
+            }
+        });
+
+        document.getElementById('answer-box2').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                checkUserAnswer(2);
+            }
+        });
+
         function fetchNewProblem() {
             fetch('http://localhost:5000/generate-problem')
                 .then(response => response.json())
@@ -270,16 +341,8 @@
                 });
         }
 
-        answerBox.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                clearAnswer();
-            }
-        });
-
-        
-
-        let timeLeft = 10; 
+        fetchNewProblem();
+        let timeLeft = 60; 
         const timerElement = document.getElementById('timer');
 
         function updateTimer() {
@@ -296,25 +359,7 @@
             }
         }
 
-
-        //const timerInterval = setInterval(updateTimer, 1000);
-
-        // Call the function to fetch and display the message
-
-        fetch('/get-problem')
-            .then(response => response.json())
-            .then(data => {
-                if (data.problem) {
-                    document.querySelector('.prompt').textContent = data.problem;
-                } else {
-                    console.error('Problem not found');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching problem:', error);
-            });
-        
-       fetchNewProblem();
+        const timerInterval = setInterval(updateTimer, 1000);
     </script>
 </body>
 </html>
