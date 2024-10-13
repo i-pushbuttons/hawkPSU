@@ -23,7 +23,7 @@ mongo_db = mongo_client['Fall2024']
 mongo_collection = mongo_db['HackPSU.Integral']
 
 def generate_integral_problem():
-    prompt = "Generate a definite integral problem for calculus students that takes at most 30 seconds. The problems should only be one sentence and have numerical answers."
+    prompt = "Generate a definite integral problem for calculus students that takes at most 30 seconds. The problems should only be one sentence long and have no variables in the answers."
     
     response = openai.Completion.create(
         engine="gpt-3.5-turbo-instruct",
