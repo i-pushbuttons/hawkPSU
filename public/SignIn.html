@@ -62,7 +62,7 @@
             width: 100%; /* Full width for labels */
         }
 
-        input[type="text"], input[type="password"] {
+        input[type="email"], input[type="password"] {
             width: 100%;
             padding: 10px;
             border: 2px solid #4CAF50;
@@ -110,8 +110,8 @@
         <h1>Sign In / Create Account</h1>
 
         <div class="input-container">
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="Enter your username" required>
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
         </div>
 
         <div class="input-container">
@@ -123,17 +123,122 @@
         <a href="#" class="link" id="createAccountLink">Create Account</a>
     </div>
 
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
     <script>
-        // Redirect to the game mode selection page when the Sign In button is clicked
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyD6RAw-E2MBugeP4RqJYCQnzDFf5jJSu-8",
+            authDomain: "competitive-stem.firebaseapp.com",
+            projectId: "competitive-stem",
+            storageBucket: "competitive-stem.appspot.com",
+            messagingSenderId: "530749112009",
+            appId: "1:530749112009:web:5944d962cef9aef95c9718",
+            measurementId: "G-C8E0PPJG62"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Helper function to validate email
+        function isValidEmail(email) {
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Helper function to validate password
+        function isValidPassword(password) {
+            return password.length >= 6; // Minimum 6 characters
+        }
+
+        // Sign In
         document.getElementById('signInButton').addEventListener('click', function() {
-            // Here, you would typically add authentication logic
-            window.location.href = 'HomePage.html'; // Replace with the actual game mode page URL
+            var email = document.getElementById('email').value.trim();
+            var password = document.getElementById('password').value;
+
+            // Edge case checks
+            if (!email || !password) {
+                alert('Please enter both email and password.');
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            if (!isValidPassword(password)) {
+                alert('Password must be at least 6 characters long.');
+                return;
+            }
+
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(function() {
+                    console.log('User signed in');
+                    window.location.href = 'index.html'; // Redirect to home page
+                })
+                .catch(function(error) {
+                    console.error('Error signing in:', error);
+                    if (error.code === 'auth/user-not-found') {
+                        alert('No account found with this email. Would you like to create an account?');
+                    } else if (error.code === 'auth/wrong-password') {
+                        alert('Incorrect password. Please try again.');
+                    } else {
+                        alert('Sign-in failed. Please check your credentials and try again.');
+                    }
+                });
         });
 
-        // Redirect to the Create Account section (you can implement the actual account creation logic later)
+        // Create Account
         document.getElementById('createAccountLink').addEventListener('click', function(event) {
             event.preventDefault();
-            alert("Account creation feature coming soon!");
+            var email = document.getElementById('email').value.trim();
+            var password = document.getElementById('password').value;
+
+            // Edge case checks
+            if (!email || !password) {
+                alert('Please enter both email and password.');
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            if (!isValidPassword(password)) {
+                alert('Password must be at least 6 characters long.');
+                return;
+            }
+
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then(function(userCredential) {
+                    console.log('Account created');
+                    alert('Account created successfully!');
+                    window.location.href = 'index.html'; // Redirect to home page
+                })
+                .catch(function(error) {
+                    console.error('Error creating account:', error);
+                    if (error.code === 'auth/email-already-in-use') {
+                        alert('This email is already in use. Please use a different email or try signing in.');
+                    } else {
+                        alert('Account creation failed. Please try again.');
+                    }
+                });
+        });
+
+        // Test code to ensure JavaScript is running
+        console.log('JavaScript is running');
+        document.getElementById('signInButton').addEventListener('click', function() {
+            console.log('Sign In button clicked');
+        });
+        document.getElementById('createAccountLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Create Account link clicked');
         });
     </script>
 </body>

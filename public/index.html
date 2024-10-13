@@ -3,13 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hawk Math</title>
+    <title>Home Page</title>
 
     <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+        import { getDatabase } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6RAw-E2MBugeP4RqJYCQnzDFf5jJSu-8",
+            authDomain: "competitive-stem.firebaseapp.com",
+            projectId: "competitive-stem",
+            storageBucket: "competitive-stem.appspot.com",
+            messagingSenderId: "530749112009",
+            appId: "1:530749112009:web:5944d962cef9aef95c9718",
+            measurementId: "G-C8E0PPJG62"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Check authentication state
+        onAuthStateChanged(auth, (user) => {
+            const authButton = document.getElementById('authButton');
+            if (user) {
+                authButton.textContent = 'Profile';
+                authButton.href = 'Profile.html';
+            } else {
+                authButton.textContent = 'Sign In';
+                authButton.href = 'SignIn.html';
+            }
+        });
+    </script>
 
     <style>
         body {
@@ -21,6 +49,26 @@
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            position: relative; /* Added for positioning the button */
+        }
+
+        .create-account {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .create-account:hover {
+            background-color: #45a049;
         }
 
         .container {
@@ -131,6 +179,7 @@
     </style>
 </head>
 <body>
+    <a href="SignIn.html" class="create-account" id="authButton">Sign In</a> <!-- Create Account Button -->
     <div class="container">
         <div class="nav">
             <button onclick="showSection('home')">Home</button>
@@ -159,26 +208,6 @@
         </div>
     </div>
 
-    <!-- Firebase Initialization Script -->
-    <script>
-        // Firebase configuration
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-        // Example Firebase auth code
-        auth.signInWithEmailAndPassword('user@example.com', 'password')
-            .then((userCredential) => {
-                const user = userCredential.user;
-                console.log('User signed in:', user);
-            })
-            .catch((error) => {
-                console.error('Error signing in:', error);
-            });
-    </script>
-
     <script>
         const playButton = document.getElementById('playButton');
         const radioButtons = document.querySelectorAll('input[name="mode"]');
@@ -202,6 +231,7 @@
         }
     </script>
 
-    <script src="app.js" defer></script>
+    <!-- Include app.js as a module -->
+    <script type="module" src="app.js"></script>
 </body>
 </html>

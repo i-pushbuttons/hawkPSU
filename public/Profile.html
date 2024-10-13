@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: Georgia, serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 400px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            margin-bottom: 20px;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Profile</h1>
+        <div class="user-info" id="userInfo">
+            <!-- User information will be displayed here -->
+        </div>
+        <button class="button" id="signOutButton">Sign Out</button>
+    </div>
+
+    <!-- Use the older Firebase CDN links -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6RAw-E2MBugeP4RqJYCQnzDFf5jJSu-8",
+            authDomain: "competitive-stem.firebaseapp.com",
+            projectId: "competitive-stem",
+            storageBucket: "competitive-stem.appspot.com",
+            messagingSenderId: "530749112009",
+            appId: "1:530749112009:web:5944d962cef9aef95c9718",
+            measurementId: "G-C8E0PPJG62"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Display user information
+        auth.onAuthStateChanged((user) => {
+            const userInfoDiv = document.getElementById('userInfo');
+            if (user) {
+                // User is signed in, display email
+                userInfoDiv.innerHTML = `
+                    <p>Email: ${user.email}</p>
+                `;
+            } else {
+                // No user is signed in, redirect to sign-in page
+                window.location.href = 'SignIn.html';
+            }
+        });
+
+        // Sign out function
+        document.getElementById('signOutButton').addEventListener('click', () => {
+            auth.signOut().then(() => {
+                console.log('User signed out');
+                window.location.href = 'index.html'; // Redirect to home page
+            }).catch((error) => {
+                console.error('Error signing out:', error);
+            });
+        });
+    </script>
+</body>
+</html>
