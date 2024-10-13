@@ -185,7 +185,7 @@
     <div class="container">
         <div class="nav">
             <button onclick="showSection('home')">Home</button>
-            <button onclick="showSection('important')">Important</button>
+            <button onclick="showSection('howToPlay')">How to Play</button>
         </div>
         <div id="home" class="content-section active">
             <img src="photos/Logo.png" alt="Logo" class="logo"> <!-- Updated image path -->
@@ -203,8 +203,7 @@
             </div>
             <button class="play-button" id="playButton" disabled onclick="goToGameOn()">Continue</button>
         </div>
-        <div id="important" class="content-section">
-            <!-- Insert important content from index.html here -->
+        <div id="howToPlay" class="content-section">
             <h2>How To Play</h2>
             <p>Choose solo to practice on your own, or competitive to play with another user on your skill level. You will be given math problems to complete in record time. Accumulate quick and correct answers to move up the ranks!</p>
         </div>
@@ -232,11 +231,6 @@
             document.getElementById(sectionId).classList.add('active');
         }
     </script>
-
-    <!-- Include app.js as a module -->
-    <script type="module" src="app.js"></script>
-</body>
-</html>
 
     <!-- Include app.js as a module -->
     <script type="module" src="app.js"></script>
