@@ -17,14 +17,15 @@ class PlayerInfo {
     }
 
     // Method to upload user data to Firestore
-    async uploadData(elo, name, email, password, username) {
+    async uploadData(elo, name, email, password, username, profilePicture) {
         try {
             await db.collection('users').doc(username).set({
                 name: name,
                 elo: elo,
                 email: email,
                 password: password, // It's not recommended to store passwords as plain text
-                username: username
+                username: username,
+                profilePicture: profilePicture // Store the profile picture URL or base64 string
             });
             console.log("User data uploaded successfully!");
         } catch (error) {
