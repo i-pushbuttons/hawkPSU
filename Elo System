@@ -77,18 +77,26 @@ class ELOSystem {
 
     findMatch(playerPool) {
         /**
-         * Finds players in a dictionary whose ELO is within ±100 of the current player's ELO.
+         * Finds players in a dictionary whose ELO is within ±100 of the current player's ELO
+         * and randomly selects one of those players for a matchup.
          *
          * @param {Object} playerPool - Object of players and their ELO ratings
-         * @return {Object} - Object of matched players with ELO within ±100 of the current player
+         * @return {Object|null} - A randomly selected matched player with ELO within ±100 of the current player, or null if no match is found
          */
-        const matchedPlayers = {};
+        const matchedPlayers = [];
         for (let player in playerPool) {
             const playerElo = playerPool[player].elo;
             if (Math.abs(playerElo - this.elo) <= 100) {
-                matchedPlayers[player] = playerPool[player];
+                matchedPlayers.push(playerPool[player]);
             }
         }
-        return matchedPlayers;
+    
+        // Randomly select one player from matchedPlayers if there are any matches
+        if (matchedPlayers.length > 0) {
+            const randomIndex = Math.floor(Math.random() * matchedPlayers.length);
+            return matchedPlayers[randomIndex];
+        }
+    
+        return null; // No matches found
     }
 }
