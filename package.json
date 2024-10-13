@@ -2,5 +2,8 @@
   "dependencies": {
     "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
     "firebase": "^10.14.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.12.0"
   }
 }

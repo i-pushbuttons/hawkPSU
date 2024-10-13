@@ -6,7 +6,8 @@
     <title>Hawk Math</title>
 
     <!-- Link to Favicon -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Change "favicon.ico" to your actual favicon file path -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
 
     <style>
         body {
@@ -113,7 +114,7 @@
 
         .prompt {
             background-color: #ddd; /* Placeholder color for prompt */
-            width: 300px; /* Width of the prompt */
+            width: 400px; /* Width of the prompt */
             height: 150px; /* Height of the prompt */
             border-radius: 10px; /* Rounded corners */
             display: flex;
@@ -153,14 +154,42 @@
             background-color: #45a049; /* Darker green on hover */
         }
     </style>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+    <script>
+    // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6RAw-E2MBugeP4RqJYCQnzDFf5jJSu-8",
+            authDomain: "competitive-stem.firebaseapp.com",
+            projectId: "competitive-stem",
+            storageBucket: "competitive-stem.appspot.com",
+            messagingSenderId: "530749112009",
+            appId: "1:530749112009:web:5944d962cef9aef95c9718"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(app);
+
+        // Fetch and display the problem
+        db.collection('problems').doc('currentProblem').get().then((doc) => {
+            if (doc.exists) {
+                document.querySelector('.prompt').textContent = doc.data().problem;
+        } else {
+            console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+</script>
+
 </head>
 <body>
     <div class="container">
         <img src="photos\LogoE.png" alt="Logo" class="logo">
         
         <div class="timer" id="timer">Timer: 00:10</div> <!-- Timer Placeholder -->
-        <!--Added timer by Jacob-->
-
         
 
 
@@ -213,19 +242,20 @@
             const answerBox = document.querySelector('.answer-box');
             if (value === '=') {
                 try {
-                    answerBox.value = eval(answerBox.value) || ''; // Evaluate and display result
+                    answerBox.value = eval(answerBox.value) || '';
                 } catch {
-                    answerBox.value = 'Error'; // Show error if eval fails
+                    answerBox.value = 'Error';
                 }
             } else {
-                answerBox.value += value; // Append value to the answer box
+                answerBox.value += value;
             }
         }
 
         function clearAnswer() {
             const answerBox = document.querySelector('.answer-box');
-            answerBox.value = ''; // Clear the answer box
+            answerBox.value = '';
         }
+
         let timeLeft = 10; 
         const timerElement = document.getElementById('timer');
 
@@ -238,11 +268,15 @@
             } else {
                 clearInterval(timerInterval);
                 setTimeout(() => {
-                    window.location.href = "EndingScreen.html"; // Redirect to EndingScreen.html after 500 ms
+                    window.location.href = "EndingScreen.html";
                 }, 500);
             }
         }
+
+
         const timerInterval = setInterval(updateTimer, 1000);
+
+        // Call the function to fetch and display the message
     </script>
 </body>
 </html>
