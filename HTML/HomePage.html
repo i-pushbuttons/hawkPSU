@@ -120,7 +120,7 @@
                 Competitive
             </label>
         </div>
-        <button class="play-button" id="playButton" disabled>Continue</button>
+        <button class="play-button" id="playButton" disabled onclick="goToGameOn()">Continue</button>
     </div>
 
     <script>
@@ -136,6 +136,11 @@
                 playButton.classList.add('enabled');
             });
         });
+
+        // Function to redirect to GameOn.html
+        function goToGameOn() {
+            window.location.href = "GameOn.html"; // Redirect to GameOn.html
+        }
     </script>
 </body>
 </html>
