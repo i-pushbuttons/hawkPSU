@@ -98,10 +98,12 @@ if st.session_state.begin_pressed and st.session_state.remaining_time > 0:
 
     st.markdown(f"Row Operations: {st.session_state.loop_count}")
 
+    st.markdown("The last column of the matrix is the y-column vector of the augmented matrix.")
     st.header("Matrix")
     st.dataframe(st.session_state.no_edit_matrix.style.format("{:.2f}"), hide_index=True) 
 
     st.header("Row-Operated Matrix")
+    st.markdown("Edit each cell as you would if you were performing a single row operation to solve the augmented matrix. Hit submit when you are done inputing your operation.")
     # Allow floats in the edit_matrix
     edited_matrix = st.data_editor(st.session_state.edit_matrix.astype(float).style.format("{:.2f}"), hide_index=True)
 
