@@ -1,0 +1,94 @@
+class ELOSystem {
+    constructor(initialElo = 0) {
+        this.elo = initialElo;
+    }
+
+    updateElo(opponentElo, result, matchType) {
+        /**
+         * Updates the ELO rating based on the opponent's ELO and the result of the match.
+         *
+         * @param {number} opponentElo - The ELO of the opponent
+         * @param {string} result - 'win', 'lose', or 'draw' to indicate the result of the match
+         * @param {string} matchType - 'beginning', 'mid', or 'top' to indicate the ladder stage
+         * @return {number} - The new ELO rating
+         */
+        // ELO difference
+        const eloDiff = opponentElo - this.elo;
+
+        if (matchType === "beginning") {
+            if (result === "win") {
+                this.elo += 30;
+            } else if (result === "lose") {
+                this.elo -= 10;
+            } // No change on draw
+        } else if (matchType === "mid") {
+            if (result === "win") {
+                this.elo += 30;
+            } else if (result === "lose") {
+                this.elo -= 30;
+            } // No change on draw
+        } else if (matchType === "top") {
+            if (result === "win") {
+                this.elo += 10;
+            } else if (result === "lose") {
+                this.elo -= 30;
+            } // No change on draw
+        }
+
+        return this.elo;
+    }
+
+    getRank() {
+        /**
+         * Determines the rank based on the current ELO rating.
+         *
+         * @return {string} - A string representing the player's rank.
+         */
+        if (this.elo < 91) {
+            return "Low-novice";
+        } else if (this.elo < 181) {
+            return "Mid-novice";
+        } else if (this.elo < 271) {
+            return "High-novice";
+        } else if (this.elo < 361) {
+            return "Low-proficient";
+        } else if (this.elo < 451) {
+            return "Mid-proficient";
+        } else if (this.elo < 541) {
+            return "High-proficient";
+        } else if (this.elo < 721) {
+            return "Low-advanced";
+        } else if (this.elo < 1001) {
+            return "Mid-advanced";
+        } else if (this.elo < 1500) {
+            return "High-advanced";
+        } else {
+            return "Top 100";
+        }
+    }
+
+    getElo() {
+        /**
+         * Returns the current ELO rating.
+         * @return {number} - The current ELO rating.
+         */
+        return this.elo;
+    }
+
+    findMatch(playerPool) {
+        /**
+         * Finds players in a dictionary whose ELO is within ±100 of the current player's ELO.
+         *
+         * @param {Object} playerPool - Object of players and their ELO ratings
+         * @return {Object} - Object of matched players with ELO within ±100 of the current player
+         */
+        const matchedPlayers = {};
+        for (let player in playerPool) {
+            const playerElo = playerPool[player].elo;
+            if (Math.abs(playerElo - this.elo) <= 100) {
+                matchedPlayers[player] = playerPool[player];
+            }
+        }
+        return matchedPlayers;
+    }
+}
