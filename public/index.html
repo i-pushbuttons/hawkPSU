@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <link rel="icon" href="photos/favicon.ico" type="image/x-icon">
+    <title>Hawk Math - Home Page</title>
 
     <!-- Firebase SDKs -->
     <script type="module">
@@ -138,10 +139,11 @@
         .play-button {
             background-color: #4CAF50;
             color: white;
-            padding: 15px 30px;
+            padding: 15px 30px; /* Adjusted padding */
             border: none;
-            border-radius: 25px;
-            font-size: 24px;
+            border-radius: 25px; /* Adjusted border radius */
+            font-size: 24px; /* Adjusted font size */
+            font-family: 'Georgia', serif;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.3s;
             opacity: 0.6;
@@ -183,10 +185,10 @@
     <div class="container">
         <div class="nav">
             <button onclick="showSection('home')">Home</button>
-            <button onclick="showSection('important')">Important</button>
+            <button onclick="showSection('howToPlay')">How to Play</button>
         </div>
         <div id="home" class="content-section active">
-            <img src="/photos/Logo.png" alt="Logo" class="logo"> <!-- Updated image path -->
+            <img src="photos/Logo.png" alt="Logo" class="logo"> <!-- Updated image path -->
             <div class="options">
                 <label>
                     <input type="radio" name="mode" value="solo">
@@ -201,10 +203,9 @@
             </div>
             <button class="play-button" id="playButton" disabled onclick="goToGameOn()">Continue</button>
         </div>
-        <div id="important" class="content-section">
-            <!-- Insert important content from index.html here -->
-            <h2>Important Content</h2>
-            <p>This is where the important content from the original index.html goes.</p>
+        <div id="howToPlay" class="content-section">
+            <h2>How To Play</h2>
+            <p>Choose solo to practice on your own, or competitive to play with another user on your skill level. You will be given math problems to complete in record time. Accumulate quick and correct answers to move up the ranks!</p>
         </div>
     </div>
 

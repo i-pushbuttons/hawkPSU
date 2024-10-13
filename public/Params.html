@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="photos/favicon.ico" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Difficulty</title>
+    <title>Hawk Math - Select Difficulty</title>
 
     <style>
         body {
@@ -28,8 +29,8 @@
 
         .logo-placeholder {
             background-color: #ddd;
-            width: 150px;
-            height: 150px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             margin: 0 auto 30px;
             display: flex;
@@ -39,72 +40,24 @@
         }
 
         .logo-placeholder img {
-            width: 120%; /* Increase to make the logo bigger */
-            height: auto; /* Maintain aspect ratio */
+            width: 200px;
+            height: 200px;
+            object-fit: contain; /* Ensures the image scales down proportionally */
         }
-
 
         .level-description {
             font-size: 16px;
             margin-bottom: 10px;
         }
 
-        .options {
-            margin: 30px 0;
+        .button-group {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            gap: 20px; /* Adds space between buttons */
+            margin-top: 20px;
         }
 
-        .radio-group {
-            margin: 20px 0;
-            text-align: left;
-        }
-
-        .custom-radio {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        input[type="radio"] {
-            display: none;
-        }
-
-        input[type="radio"] + .custom-radio-label {
-            position: relative;
-            padding-left: 40px;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        input[type="radio"] + .custom-radio-label:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 20px;
-            height: 20px;
-            border: 2px solid #4CAF50;
-            border-radius: 50%;
-            background-color: white;
-        }
-
-        input[type="radio"]:checked + .custom-radio-label:before {
-            background-color: #4CAF50;
-        }
-
-        select {
-            margin-top: 10px;
-            padding: 10px 20px; /* Increase padding */
-            font-size: 18px; /* Increase font size */
-            width: 80%; /* Set width to 80% of the container */
-            max-width: 400px; /* Set a max-width */
-        }
-
-        .play-button {
+        .play-button, .matrix-button {
             background-color: #4CAF50;
             color: white;
             padding: 15px 30px;
@@ -113,11 +66,16 @@
             font-size: 24px;
             font-family: 'Georgia', serif;
             cursor: pointer;
-            margin-top: 20px;
             transition: background-color 0.3s, transform 0.3s;
         }
 
-        .play-button:hover {
+        .matrix-button img {
+            max-width: 175px; /* Set the maximum width */
+            max-height: 175px; /* Set the maximum height */
+            object-fit: contain; /* Ensures the image scales down proportionally */
+        }
+
+        .play-button:hover, .matrix-button:hover {
             background-color: #45a049;
             transform: scale(1.05);
         }
@@ -126,49 +84,20 @@
 <body>
     <div class="container">
         <div class="logo-placeholder">
-            <img src="photos\Logo.png" alt="Logo" class="logo">
+            <img src="photos/Logo.png" alt="Logo" class="logo">
         </div>
 
-        <div class="options">
-            <div class="radio-group">
-                <label class="custom-radio">
-                    <input type="radio" name="difficulty" id="novice" value="novice">
-                    <span class="custom-radio-label">Novice (around 3 min)</span>
-                </label>
-                <p class="level-description">Time-based, easy, as many as possible, compare correctness</p>
-
-                <label class="custom-radio">
-                    <input type="radio" name="difficulty" id="proficient" value="proficient">
-                    <span class="custom-radio-label">Proficient (around 4 min)</span>
-                </label>
-                <p class="level-description">Timed, easy-hard, as many as possible, compare correctness</p>
-
-                <label class="custom-radio">
-                    <input type="radio" name="difficulty" id="advanced" value="advanced">
-                    <span class="custom-radio-label">Advanced (5 min)</span>
-                </label>
-                <p class="level-description">Time limit, difficult, whoever solves first</p>
-            </div>
-
-            <select id="difficulty-select" style="display: none;">
-                <option value="low">Low</option>
-                <option value="mid">Mid</option>
-                <option value="high">High</option>
-            </select>
+        <div class="level-description">
+            <h2>Time Rush (3 min)</h2>
+            <p>Time-based, easy, as many as possible, compare correctness</p>
         </div>
 
-        <button class="play-button" onclick="window.location.href='GameOn.html'">Play</button>
+        <div class="button-group">
+            <button class="play-button" onclick="window.location.href='GameOn.html'">Play</button>
+            <button class="matrix-button" onclick="window.location.href='Settings.html'">
+                <img src="photos/LogoG.png" alt="hawkMATRIX" class="button-icon">
+            </button>
+        </div>
     </div>
-
-    <script>
-        const radioButtons = document.querySelectorAll('input[name="difficulty"]');
-        const difficultySelect = document.getElementById('difficulty-select');
-
-        radioButtons.forEach(radio => {
-            radio.addEventListener('change', function() {
-                difficultySelect.style.display = 'block'; // Show the dropdown when a radio button is selected
-            });
-        });
-    </script>
 </body>
 </html>
