@@ -65,3 +65,33 @@ def store_in_mongodb(problem):
 integral_problem = generate_integral_problem()
 print("Definite Integral Problem:", integral_problem)
 store_in_mongodb(integral_problem)
+
+class UserDataManager:
+    def __init__(self, file_path='user_data.json'):
+        self.file_path = file_path
+        self.users = self.load_users()
+
+    def load_users(self):
+        if os.path.exists(self.file_path):
+            with open(self.file_path, 'r') as file:
+                return json.load(file)
+        return {}
+
+    def save_users(self):
+        with open(self.file_path, 'w') as file:
+            json.dump(self.users, file, indent=4)
+
+    def add_user(self, username, email, password, elo=1000):
+        if username in self.users:
+            raise ValueError("Username already exists.")
+        self.users[username] = {
+            'elo': elo,
+            'email': email,
+            'password': password
+        }
+        self.save_users()
+
+    def get_user(self, username):
+        user_data = self.users.get(username, None)
+        return jsonify(user_data) if user_data else jsonify({'error': 'User not found'})
+

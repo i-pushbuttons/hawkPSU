@@ -38,3 +38,17 @@ app.get('/get-problem', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
+
+async function getUserData(userId) {
+    try {
+        const response = await fetch(`/user/${userId}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const userData = await response.json();
+        return userData;
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        return { error: 'Failed to fetch user data' };
+    }
+}
