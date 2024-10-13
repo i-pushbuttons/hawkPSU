@@ -251,10 +251,33 @@
             }
         }
 
+        const answerBox = document.querySelector('.answer-box');
+        const promptElement = document.querySelector('.prompt');
+
         function clearAnswer() {
-            const answerBox = document.querySelector('.answer-box');
             answerBox.value = '';
+            promptElement.textContent = ''; // Revised by Jacob
+            fetchNewProblem();
         }
+        function fetchNewProblem() {
+            fetch('http://localhost:5000/generate-problem')
+                .then(response => response.json())
+                .then(data => {
+                    promptElement.textContent = data.problem;
+                })
+                .catch(error => {
+                    console.error('Error fetching new problem:', error);
+                });
+        }
+
+        answerBox.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                clearAnswer();
+            }
+        });
+
+        
 
         let timeLeft = 10; 
         const timerElement = document.getElementById('timer');
@@ -274,9 +297,24 @@
         }
 
 
-        const timerInterval = setInterval(updateTimer, 1000);
+        //const timerInterval = setInterval(updateTimer, 1000);
 
         // Call the function to fetch and display the message
+
+        fetch('/get-problem')
+            .then(response => response.json())
+            .then(data => {
+                if (data.problem) {
+                    document.querySelector('.prompt').textContent = data.problem;
+                } else {
+                    console.error('Problem not found');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching problem:', error);
+            });
+        
+       fetchNewProblem();
     </script>
 </body>
 </html>
