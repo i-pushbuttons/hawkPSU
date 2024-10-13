@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawk Math</title>
+
+    <!-- Link to Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Change "favicon.ico" to your actual favicon file path -->
+    
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Georgia, serif; /* Set font to Georgia for the body */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* Full height of the viewport */
+            margin: 0;
+            background-color: #f0f0f0; /* Light background color */
+            overflow: hidden; /* Prevent scrollbars during animation */
+        }
+
+        .container {
+            background-color: white; /* White background for the container */
+            padding: 30px;
+            border-radius: 25px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            width: 500px; /* Width of the container */
+            text-align: center; /* Center text in the container */
+            animation: fadeIn 1s, celebrate 2s forwards; /* Animation for entering and celebration */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes celebrate {
+            0% { transform: translateY(0); }
+            25% { transform: translateY(-10px); }
+            50% { transform: translateY(0); }
+            75% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+        .logo-placeholder {
+            background-color: #ddd; /* Placeholder color for logo */
+            width: 100px; /* Width of the logo */
+            height: 40px; /* Height of the logo */
+            margin: 0 auto; /* Center the logo */
+            display: flex; /* Use flexbox for centering content */
+            align-items: center; /* Center content vertically */
+            justify-content: center; /* Center content horizontally */
+            font-size: 18px; /* Font size for logo text */
+            color: #333; /* Text color */
+            margin-bottom: 20px; /* Space below logo */
+        }
+
+        #myChart {
+            max-width: 100%; /* Responsive width for the chart */
+            height: 300px; /* Height of the chart */
+        }
+
+        .winner {
+            font-size: 24px; /* Font size for the winner text */
+            font-weight: bold; /* Bold text for the winner */
+            margin: 20px 0; /* Space around winner text */
+            font-family: Georgia, serif; /* Georgia font for winner text */
+        }
+
+        .restart-button {
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text */
+            border: none; /* No border */
+            padding: 10px 20px; /* Padding for button */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            font-size: 18px; /* Font size for button */
+            transition: background-color 0.3s; /* Transition effect */
+            font-family: Georgia, serif; /* Ensure button text is in Georgia font */
+        }
+
+        .restart-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        /* Style for usernames */
+        .username {
+            font-family: Georgia, serif; /* Georgia font for usernames */
+            font-size: 20px; /* Optional: Adjust size */
+            margin: 5px 0; /* Optional: Space above and below */
+        }
+
+        /* Confetti animation */
+        .confetti {
+            position: absolute;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 999; /* Keep it on top */
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="C:\Users\alder\OneDrive\Desktop\HACKPSU\photos\LogoD.png" alt="Logo" class="logo">
+        <h1>Good Work!</h1>
+        
+        <canvas id="myChart"></canvas> <!-- Chart placeholder -->
+        <div class="winner" id="winner"></div> <!-- Winner display -->
+        
+        <button class="restart-button" onclick="restartGame()">Restart</button> <!-- Restart button -->
+    </div>
+
+    <div class="confetti" id="confetti"></div> <!-- Confetti container -->
+
+    <script>
+        // Sample data for scores
+        const user1 = {
+            username: "User1",
+            correct: 8,
+            wrong: 2,
+            ranking: 1
+        };
+        
+        const user2 = {
+            username: "User2",
+            correct: 6,
+            wrong: 4,
+            ranking: 2
+        };
+
+        // Display winner
+        const winnerText = user1.correct > user2.correct ? user1.username : user2.username;
+        document.getElementById('winner').innerText = `Winner: ${winnerText}`;
+
+        // Bar chart configuration
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [user1.username, user2.username],
+                datasets: [{
+                    label: 'Correct Answers',
+                    data: [user1.correct, user2.correct],
+                    backgroundColor: 'rgba(76, 175, 80, 0.6)',
+                },
+                {
+                    label: 'Wrong Answers',
+                    data: [user1.wrong, user2.wrong],
+                    backgroundColor: 'rgba(244, 67, 54, 0.6)',
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 2000, // Duration of the animation
+                    easing: 'easeOutBounce', // Easing function for animation
+                    onComplete: function() {
+                        // Add any additional actions after the animation completes here
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                family: 'Georgia', // Set font for legend labels
+                                size: 14 // Optional: Adjust size
+                            }
+                        }
+                    },
+                    tooltip: {
+                        bodyFont: {
+                            family: 'Georgia' // Set font for tooltips
+                        }
+                    }
+                }
+            }
+        });
+
+        // Function to generate confetti
+        function generateConfetti() {
+            const confettiContainer = document.getElementById('confetti');
+
+            for (let i = 0; i < 100; i++) {
+                const confettiPiece = document.createElement('div');
+                confettiPiece.classList.add('confetti-piece');
+                confettiPiece.style.left = Math.random() * 100 + 'vw'; // Random horizontal position
+                confettiPiece.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random color
+                confettiPiece.style.animationDuration = Math.random() * 2 + 3 + 's'; // Random fall duration
+                confettiContainer.appendChild(confettiPiece);
+
+                // Remove confetti after it falls
+                setTimeout(() => {
+                    confettiPiece.remove();
+                }, 5000);
+            }
+        }
+
+        // Call the generateConfetti function to start the animation
+        generateConfetti();
+
+        // Function to restart the game
+        function restartGame() {
+            // Redirect to HomePage.html
+            window.location.href = "HomePage.html"; // Change to your actual homepage file path
+        }
+    </script>
+</body>
+</html>
