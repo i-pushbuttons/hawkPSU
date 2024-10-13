@@ -158,7 +158,11 @@
     <div class="container">
         <img src="photos\LogoE.png" alt="Logo" class="logo">
         
-        <div class="timer">Timer: 00:00</div> <!-- Timer Placeholder -->
+        <div class="timer" id="timer">Timer: 00:10</div> <!-- Timer Placeholder -->
+        <!--Added timer by Jacob-->
+
+        
+
 
         <div class="user-container">
             <div class="user">
@@ -222,6 +226,23 @@
             const answerBox = document.querySelector('.answer-box');
             answerBox.value = ''; // Clear the answer box
         }
+        let timeLeft = 10; 
+        const timerElement = document.getElementById('timer');
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `Timer: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            if (timeLeft > 0) {
+                timeLeft--;
+            } else {
+                clearInterval(timerInterval);
+                setTimeout(() => {
+                    window.location.href = "EndingScreen.html"; // Redirect to EndingScreen.html after 500 ms
+                }, 500);
+            }
+        }
+        const timerInterval = setInterval(updateTimer, 1000);
     </script>
 </body>
 </html>
